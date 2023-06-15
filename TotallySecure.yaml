@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  SensitiveBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Join
+        - ''
+        - - 'sensitive-'
+          - !Ref 'AWS::AccountId'
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: 'BucketOwnerPreferred'
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+  PublicBucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref SensitiveBucket
+      PolicyDocument:
+        Statement:
+          -
+            Action: 
+              - s3:Get*
+            Effect: Allow
+            Resource:
+              - !Sub arn:aws:s3:::${SensitiveBucket}/*
+            Principal:
+              AWS:
+                - '*'
+          -
+            Action:
+              - s3:List*
+            Effect: Allow
+            Resource:
+              - !Sub arn:aws:s3:::${SensitiveBucket}
+            Principal:
+              AWS:
+                - '*'
