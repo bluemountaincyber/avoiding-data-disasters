@@ -5,7 +5,7 @@ RED="\033[31m"
 NOCOLOR="\033[0m"
 
 echo -en $GREEN"Deploying CloudFormation stack... "$NOCOLOR
-aws cloudformation create-stack --stack-name avoiding-data-disasters --template-body file://TotallySecure.yaml --profile cloudtools
+aws cloudformation create-stack --stack-name avoiding-data-disasters --template-body file://TotallySecure.yaml
 echo "Done"
 
 echo -en $GREEN"Uploading sensitive data... "$NOCOLOR

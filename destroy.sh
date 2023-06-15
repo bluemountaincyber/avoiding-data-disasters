@@ -9,5 +9,5 @@ echo -en $GREEN"Emptying sensitive-$BUCKET bucket... "$NOCOLOR
 aws s3 rm --recursive s3://$BUCKET
 
 echo -en $GREEN"Destroying CloudFormation stack... "$NOCOLOR
-aws cloudformation delete-stack --stack-name avoiding-data-disasters --profile cloudtools
+aws cloudformation delete-stack --stack-name avoiding-data-disasters
 echo "Done"
