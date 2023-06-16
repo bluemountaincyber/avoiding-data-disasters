@@ -1,0 +1,12 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  SensitiveBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Join
+        - ''
+        - - 'sensitive-'
+          - !Ref 'AWS::AccountId'
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: 'BucketOwnerPreferred'

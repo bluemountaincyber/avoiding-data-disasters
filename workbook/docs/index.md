@@ -1,16 +1,15 @@
-# Welcome to Building Detections in AWS
+# Welcome to Avoiding Data Disasters
 
-## Description
+## Learning Objectives
 
-In this workshop, you will work through detection-building process previously discussed in the SANS Webcast, [Building Better Detections... By Hacking | AWS Edition](https://www.sans.org/webcasts/building-better-cloud-detections-hacking-aws-edition/). Below is the overall process we will discuss and follow:
+- Discover all-too-common cloud storage security deficiencies present as either insecure vendor defaults or careless mistakes
+- Correct these issues using a variety of means (e.g., cloud management console, command line tools, and Infrastructure-as-Code)
 
-![Detection Build Process](img/detection-build-process.png ""){: class="w600" }
+## Pre-requisite Knowledge
 
-We will conduct the following exercises:
+- None
 
-- [ ] [Exercise 1](exercises/exercise1.md): Deploy cloud resources with AWS CloudFormation to support both the attack and some of the automation that will be used in later exercises
-- [ ] [Exercise 2](exercises/exercise2.md): Setting up appropriate logging to catch the sample attack
-- [ ] [Exercise 3](exercises/exercise3.md): Conduct the sample attack
-- [ ] [Exercise 4](exercises/exercise4.md): Review the log data to detect the attack
-- [ ] [Exercise 5](exercises/exercise5.md): Automate the detection of the attack and test the automation
-- [ ] [Exercise 6](exercises/exercise6.md): Cleanup of the workshop resources
+## System Requirements
+
+- Laptop with a modern web browser
+- AWS account with root access or an IAM user with `AdministratorAccess` permissions
