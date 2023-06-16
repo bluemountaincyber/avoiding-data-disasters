@@ -1,4 +1,4 @@
-# Exercise 2: API Event Logging
+# Exercise 2: Shutting Down Public Access
 
 <!-- markdownlint-disable MD007 MD033-->
 
@@ -13,9 +13,9 @@
 
 ## Objectives
 
-* Research ATT&CK Technique T1078.004 detections and discover an approach to use in your AWS account
-* Create log collection S3 bucket
-* Enable CloudTrail trail capturing management and data events
+- Remove public access from the S3 bucket
+- Prevent future buckets from becoming public across the entire account
+- Attempt to change a bucket setting back to public
 
 ## Challenges
 

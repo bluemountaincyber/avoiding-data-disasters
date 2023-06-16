@@ -1,18 +1,18 @@
-site_name: 'Building Detections in AWS'
+site_name: 'Avoiding Data Disasters'
 copyright: '©2023 Ryan Nicholson | Blue Mountain Cyber, LLC'
-site_description: 'Building Detections in AWS'
+site_description: 'Avoiding Data Disasters'
 site_author: 'Ryan Nicholson'
 extra:
-  version: '2023-03-17'
+  version: '2023-06-16'
 
 INHERIT: ./base_config.yml
 
 nav:
   - Home: 'index.md'
   - Exercises:
-    - 'Exercise 1: Infrastructure Deployment': 'exercises/exercise1.md'
-    - 'Exercise 2: API Event Logging': 'exercises/exercise2.md'
-    - 'Exercise 3: Attacking the Cloud Account': 'exercises/exercise3.md'
-    - 'Exercise 4: Detecting the Attack': 'exercises/exercise4.md'
-    - 'Exercise 5: Building an Automated Detection': 'exercises/exercise5.md'
+    - 'Exercise 1: The Big Mistake': 'exercises/exercise1.md'
+    - 'Exercise 2: Shutting Down Public Access': 'exercises/exercise2.md'
+    - 'Exercise 3: Availability': 'exercises/exercise3.md'
+    - 'Exercise 4: Monitoring': 'exercises/exercise4.md'
+    - 'Exercise 5: Reviewing Our Work and Shifting Left': 'exercises/exercise5.md'
     - 'Exercise 6: Tearing Down Resources': 'exercises/exercise6.md'

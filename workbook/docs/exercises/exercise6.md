@@ -18,8 +18,15 @@ Log back into your **CloudShell** session and use `destroy.sh` to destroy the wo
     1. In your **CloudShell** session, run the following command to destroy all workbook resources:
 
         ```bash
-        /home/cloudshell-user/building-detections-aws/scripts/destroy.sh
+        /home/cloudshell-user/avoiding-data-disasters/destroy.sh
         ```
+
+        !!! summary "Expected result"
+
+            ```bash
+            Emptying sensitive-206757820151 bucket... Done
+            Destroying CloudFormation stack... Done
+            ```
 
 ### Challenge 2: (Optional) Reset CloudShell Home Directory
 
