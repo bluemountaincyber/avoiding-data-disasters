@@ -31,6 +31,7 @@ while true; do
 done
 
 echo -en $GREEN"Uploading sensitive data... "$NOCOLOR
+BUCKET=$(aws s3 ls | grep sensitive- | awk '{print $3}')
 aws s3 cp customers.csv s3://$BUCKET/customers.csv >/dev/null
 popd >/dev/null
 aws s3 ls s3://$BUCKET/customers.csv >/dev/null
