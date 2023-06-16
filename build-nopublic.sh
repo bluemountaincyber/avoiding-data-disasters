@@ -4,11 +4,10 @@ GREEN="\033[32m"
 RED="\033[31m"
 NOCOLOR="\033[0m"
 
-aws cloudformation delete-stack --stack-name avoiding-data-disasters 2>/dev/null >/dev/null
-sleep 5
-
 pushd ~/avoiding-data-disasters >/dev/null
 echo -en $GREEN"Deploying CloudFormation stack... "$NOCOLOR
+aws cloudformation delete-stack --stack-name avoiding-data-disasters 2>/dev/null >/dev/null
+sleep 5
 aws cloudformation create-stack --stack-name avoiding-data-disasters --template-body file://TotallyMoreSecure.yaml >/dev/null
 while true; do
     case $(aws cloudformation describe-stacks --query 'Stacks[].StackStatus' --output text) in
