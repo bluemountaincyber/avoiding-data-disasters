@@ -134,7 +134,7 @@ Attempt to undo some of the settings from challenge 1 to see if you are stopped.
 
     2. It failed! That's what we want! We tried to break a rule and AWS wouldn't let us.
 
-    3. There's another template that does not attempt to create a public bucket we can use that is part of another script: `build-nopublic.sh`. Run that command to deploy a private bucket.
+    3. There's another template that does not attempt to create a public bucket we can use that is part of another script: `build-nopublic.sh`. Run that command to deploy a private bucket. This should get us back to where we left off for the next few exercises.
 
         ```bash
         /home/cloudshell-user/avoiding-data-disasters/build-nopublic.sh
@@ -144,8 +144,9 @@ Attempt to undo some of the settings from challenge 1 to see if you are stopped.
 
             ```bash
             Deploying CloudFormation stack... Done
+            Uploading sensitive data... Done
             ```
 
-    4. 
-
 ## Conclusion
+
+In this exercise, you found just how it easy it is to remove public access but also how to prevent those incorrect settings from showing up in the future! We still have plenty of work to further protect this sensitive bucket.
