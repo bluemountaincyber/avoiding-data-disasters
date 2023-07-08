@@ -116,7 +116,7 @@ Attempt to undo some of the settings from challenge 1 to see if you are stopped.
         !!! summary "Sample result"
 
             ```bash
-            Emptying sensitive-206757820151 bucket... Done
+            Emptying sensitive-012345678910 bucket... Done
             Destroying CloudFormation stack... Done
             ```
 
