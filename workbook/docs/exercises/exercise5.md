@@ -103,6 +103,98 @@ Tear down the current deployment, create a new CloudFormation template called `M
             Destroying CloudFormation stack... Done
             ```
 
+    2. We can start with `TotallyMoreSecure.yaml` as a template and build those manual changes that were performed previously to it. Here is what we will begin with:
+
+        !!! summary "Starting point"
+
+            ```yaml
+            AWSTemplateFormatVersion: 2010-09-09
+            Resources:
+            SensitiveBucket:
+                Type: AWS::S3::Bucket
+                Properties:
+                BucketName: !Join
+                    - ''
+                    - - 'sensitive-'
+                    - !Ref 'AWS::AccountId'
+                OwnershipControls:
+                    Rules:
+                    - ObjectOwnership: 'BucketOwnerPreferred'
+            ```
+
+    3. Next, you will need to add versioning to address availability concerns. To do this, there is a configuration element called `VersioningConfiguration` that must be added. You can learn more about this [here](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket.html#cfn-s3-bucket-versioning) if you'd like. The value of this item should be set to `Status: Enabled` to enforce versioning. Now, our template looks like this:
+
+        !!! summary "Starting point"
+
+            ```yaml
+            AWSTemplateFormatVersion: 2010-09-09
+            Resources:
+              SensitiveBucket:
+                Type: AWS::S3::Bucket
+                Properties:
+                BucketName: !Join
+                  - ''
+                  - - 'sensitive-'
+                  - !Ref 'AWS::AccountId'
+                OwnershipControls:
+                  Rules:
+                    - ObjectOwnership: 'BucketOwnerPreferred'
+                VersioningConfiguration:
+                  Status: Enabled 
+            ```
+
+    4. Now, for the access logging. This one is a bit more cumbersome as we will need to add the `LoggingConfiguration` element and reference a bucket name dynamically (just like the original code does for the `sensitive-` bucket) as it will be different for each workshop participant. As noted [here](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-loggingconfig.html), we need to reference a `DestinationBucketName` which is our `security-` bucket. This makes our template read as follows:
+
+        !!! summary "Starting point"
+
+            ```yaml
+            AWSTemplateFormatVersion: 2010-09-09
+            Resources:
+              SensitiveBucket:
+                Type: AWS::S3::Bucket
+                Properties:
+                BucketName: !Join
+                  - ''
+                  - - 'sensitive-'
+                  - !Ref 'AWS::AccountId'
+                OwnershipControls:
+                  Rules:
+                    - ObjectOwnership: 'BucketOwnerPreferred'
+                VersioningConfiguration:
+                  Status: Enabled
+                LoggingConfiguration:
+                  DestinationBucketName: !Join
+                  - ''
+                  - - 'security-'
+                  - !Ref 'AWS::AccountId'
+            ```
+
+    5. To generate this bucket, we must first create a new file with this YAML content. Use the following heredoc to write the YAML content to `/home/cloudshell-user/avoiding-data-disasters/MostSecure.yaml`.
+
+        ```bash
+        cat <<EOF > /home/cloudshell-user/avoiding-data-disasters/MostSecure.yaml
+        AWSTemplateFormatVersion: 2010-09-09
+          Resources:
+            SensitiveBucket:
+              Type: AWS::S3::Bucket
+              Properties:
+              BucketName: !Join
+                - ''
+                - - 'sensitive-'
+                - !Ref 'AWS::AccountId'
+              OwnershipControls:
+                Rules:
+                  - ObjectOwnership: 'BucketOwnerPreferred'
+              VersioningConfiguration:
+                Status: Enabled
+              LoggingConfiguration:
+                DestinationBucketName: !Join
+                - ''
+                - - 'security-'
+                - !Ref 'AWS::AccountId'
+        EOF
+        ```
+
 ### Challenge 3: Assess New Template With checkov
 
 ??? cmd "Solution"
