@@ -110,16 +110,16 @@ Tear down the current deployment, create a new CloudFormation template called `M
             ```yaml
             AWSTemplateFormatVersion: 2010-09-09
             Resources:
-            SensitiveBucket:
+              SensitiveBucket:
                 Type: AWS::S3::Bucket
                 Properties:
-                BucketName: !Join
+                  BucketName: !Join
                     - ''
                     - - 'sensitive-'
-                    - !Ref 'AWS::AccountId'
-                OwnershipControls:
+                      - !Ref 'AWS::AccountId'
+                  OwnershipControls:
                     Rules:
-                    - ObjectOwnership: 'BucketOwnerPreferred'
+                      - ObjectOwnership: 'BucketOwnerPreferred'
             ```
 
     3. Next, you will need to add versioning to address availability concerns. To do this, there is a configuration element called `VersioningConfiguration` that must be added. You can learn more about this [here](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket.html#cfn-s3-bucket-versioning) if you'd like. The value of this item should be set to `Status: Enabled` to enforce versioning. Now, our template looks like this:
@@ -132,15 +132,15 @@ Tear down the current deployment, create a new CloudFormation template called `M
               SensitiveBucket:
                 Type: AWS::S3::Bucket
                 Properties:
-                BucketName: !Join
-                  - ''
-                  - - 'sensitive-'
-                  - !Ref 'AWS::AccountId'
-                OwnershipControls:
-                  Rules:
-                    - ObjectOwnership: 'BucketOwnerPreferred'
-                VersioningConfiguration:
-                  Status: Enabled 
+                  BucketName: !Join
+                    - ''
+                    - - 'sensitive-'
+                      - !Ref 'AWS::AccountId'
+                  OwnershipControls:
+                    Rules:
+                      - ObjectOwnership: 'BucketOwnerPreferred'
+                  VersioningConfiguration:
+                    Status: Enabled 
             ```
 
     4. Now, for the access logging. This one is a bit more cumbersome as we will need to add the `LoggingConfiguration` element and reference a bucket name dynamically (just like the original code does for the `sensitive-` bucket) as it will be different for each workshop participant. As noted [here](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-loggingconfig.html), we need to reference a `DestinationBucketName` which is our `security-` bucket. This makes our template read as follows:
@@ -153,35 +153,66 @@ Tear down the current deployment, create a new CloudFormation template called `M
               SensitiveBucket:
                 Type: AWS::S3::Bucket
                 Properties:
-                BucketName: !Join
-                  - ''
-                  - - 'sensitive-'
-                  - !Ref 'AWS::AccountId'
-                OwnershipControls:
-                  Rules:
-                    - ObjectOwnership: 'BucketOwnerPreferred'
-                VersioningConfiguration:
-                  Status: Enabled
-                LoggingConfiguration:
-                  DestinationBucketName: !Join
-                  - ''
-                  - - 'security-'
-                  - !Ref 'AWS::AccountId'
+                  BucketName: !Join
+                    - ''
+                    - - 'sensitive-'
+                      - !Ref 'AWS::AccountId'
+                  OwnershipControls:
+                    Rules:
+                      - ObjectOwnership: 'BucketOwnerPreferred'
+                  VersioningConfiguration:
+                    Status: Enabled
+                  LoggingConfiguration:
+                    DestinationBucketName: !Join
+                      - ''
+                      - - 'security-'
+                        - !Ref 'AWS::AccountId'
             ```
 
-    5. To generate this bucket, we must first create a new file with this YAML content. Use the following heredoc to write the YAML content to `/home/cloudshell-user/avoiding-data-disasters/MostSecure.yaml`.
+    5. While we're at it, let's make sure that the block public access settings are in place just in case some defaults were to change in the future (and also to make some assessment tools happy). In this case, the `PublicAccessBlockConfiguration` must be included as noted [here](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket.html#cfn-s3-bucket-publicaccessblockconfiguration). We should include all four options (`BlockPublicAcls`, `BlockPublicPolicy`, `IgnorePublicAcls`, `RestrictPublicBuckets`) and set them to `true`. That will leave us with this:
+
+        !!! summary "Starting point"
+
+            ```yaml
+            AWSTemplateFormatVersion: 2010-09-09
+            Resources:
+              SensitiveBucket:
+                Type: AWS::S3::Bucket
+                Properties:
+                  BucketName: !Join
+                    - ''
+                    - - 'sensitive-'
+                      - !Ref 'AWS::AccountId'
+                  OwnershipControls:
+                    Rules:
+                      - ObjectOwnership: 'BucketOwnerPreferred'
+                  VersioningConfiguration:
+                    Status: Enabled
+                  LoggingConfiguration:
+                    DestinationBucketName: !Join
+                      - ''
+                      - - 'security-'
+                        - !Ref 'AWS::AccountId'
+                  PublicAccessBlockConfiguration:
+                    BlockPublicAcls: true
+                    BlockPublicPolicy: true
+                    IgnorePublicAcls: true
+                    RestrictPublicBuckets: true
+            ```
+
+    6. To generate this bucket, we must first create a new file with this YAML content. Use the following heredoc to write the YAML content to `/home/cloudshell-user/avoiding-data-disasters/MostSecure.yaml`.
 
         ```bash
         cat <<EOF > /home/cloudshell-user/avoiding-data-disasters/MostSecure.yaml
         AWSTemplateFormatVersion: 2010-09-09
-          Resources:
-            SensitiveBucket:
-              Type: AWS::S3::Bucket
-              Properties:
+        Resources:
+          SensitiveBucket:
+            Type: AWS::S3::Bucket
+            Properties:
               BucketName: !Join
                 - ''
                 - - 'sensitive-'
-                - !Ref 'AWS::AccountId'
+                  - !Ref 'AWS::AccountId'
               OwnershipControls:
                 Rules:
                   - ObjectOwnership: 'BucketOwnerPreferred'
@@ -189,14 +220,179 @@ Tear down the current deployment, create a new CloudFormation template called `M
                 Status: Enabled
               LoggingConfiguration:
                 DestinationBucketName: !Join
-                - ''
-                - - 'security-'
-                - !Ref 'AWS::AccountId'
+                  - ''
+                  - - 'security-'
+                    - !Ref 'AWS::AccountId'
+              PublicAccessBlockConfiguration:
+                BlockPublicAcls: true
+                BlockPublicPolicy: true
+                IgnorePublicAcls: true
+                RestrictPublicBuckets: true
         EOF
         ```
 
+    7. And now, the moment of truth! Run `build-final.sh` to deploy this new, much more secure S3 bucket.
+
+        ```bash
+        /home/cloudshell-user/avoiding-data-disasters/build-final.sh
+        ```
+
+        !!! summary "Sample result"
+
+            ```bash
+            Deploying CloudFormation stack one last time... Done
+            Uploading sensitive data... Done
+            ```
+
 ### Challenge 3: Assess New Template With checkov
+
+There was a lot of building, finding issues with an assessment tool, tearing down, adjusting code, and repeating of this process throughout the workshop... but there's a better way to get in front of these issues - even before deploying ANYTHING. So, to "shift security left", analyze the original and final CloudFormation templates to see how an assessment tool can inform us of what possible security issues would arise had we deployed this Infrastructure as Code (IaC).
+
+The security tool you can use is **Checkov**. This tool is not installed in **AWS CloudShell**, so you will need to get it up and running before you can assess the `TotallySecure.yaml` and `MostSecure.yaml` files.
 
 ??? cmd "Solution"
 
+    1. To begin, you must first install **Checkov**. Since **Checkov** is a tool written in Python, you can set up a virtual environment in your `/home/cloudshell-user/avoiding-data-disasters` directory and install it using `pip`, like so:
+
+        ```bash
+        cd /home/cloudshell-user/avoiding-data-disasters
+        python3 -m venv .venv
+        source .venv/bin/activate
+        pip install checkov
+        ```
+
+        !!! summary "Sample result"
+
+            ```bash
+            <snip>
+
+            0.7.5 update-checker-0.18.0 uritools-4.0.1 urllib3-1.26.16 wcwidth-0.2.6 websocket-client-1.6.1 xmltodict-0.13.0 yarl-1.9.2 zipp-3.15.0
+            WARNING: You are using pip version 22.0.4; however, version 23.1.2 is available.
+            You should consider upgrading via the '/home/cloudshell-user/avoiding-data-disasters/.venv/bin/python3 -m pip install --upgrade pip' command.
+            ```
+
+    2. To ensure that **Checkov** was installed properly and to see what options it has, you can run the following:
+
+        ```bash
+        checkov --help
+        ```
+
+        !!! summary "Sample result"
+
+            ```bash
+            usage: checkov [-h] [-v] [--support] [-d DIRECTORY] [--add-check]
+               [-f FILE [FILE ...]] [--skip-path SKIP_PATH]
+               [--external-checks-dir EXTERNAL_CHECKS_DIR]
+               [--external-checks-git EXTERNAL_CHECKS_GIT] [-l]
+               [-o {cli,csv,cyclonedx,cyclonedx_json,json,junitxml,github_failed_only,gitlab_sast,sarif,spdx}]
+               [--output-file-path OUTPUT_FILE_PATH] [--output-bc-ids]
+               [--include-all-checkov-policies] [--quiet] [--compact]
+
+            <snip>
+
+              --openai-api-key OPENAI_API_KEY
+                        Add an OpenAI API key to enhance finding guidelines by
+                        sending violated policies and resource code to OpenAI
+                        to request remediation guidance. This will use your
+                        OpenAI credits. Set your number of findings that will
+                        receive enhanced guidelines using
+                        CKV_OPENAI_MAX_FINDINGS [env var: CKV_OPENAI_API_KEY]
+
+            Args that start with '--' can also be set in a config file (/home/cloudshell-
+            user/avoiding-data-disasters/.checkov.yaml or /home/cloudshell-user/avoiding-
+            data-disasters/.checkov.yml or /home/cloudshell-user/.checkov.yaml or
+            /home/cloudshell-user/.checkov.yml or specified via --config-file). The config
+            file uses YAML syntax and must represent a YAML 'mapping' (for details, see
+            http://learn.getgrav.org/advanced/yaml). In general, command-line values
+            override environment variables which override config file values which
+            override defaults.
+            ```
+
+    3. That is quite verbose. You may notice that this tool supports a large variety of IaC offerings, including CloudFormation. It is even smart enough, in most cases, to understand the IaC product it is testing, so we can just use the `--file` flag to target our original and most secure CloudFormation template files. Let's start with `TotallySecure.yaml`.
+
+        ```bash
+        checkov --file /home/cloudshell-user/avoiding-data-disasters/TotallySecure.yaml
+        ```
+
+        !!! summary "Sample result"
+
+            ```bash
+            <snip>
+
+            Check: CKV_AWS_56: "Ensure S3 bucket has 'restrict_public_bucket' enabled"
+            FAILED for resource: AWS::S3::Bucket.SensitiveBucket
+            File: /TotallySecure.yaml:3-17
+            Guide: https://docs.paloaltonetworks.com/content/techdocs/en_US/prisma/prisma-cloud/prisma-cloud-code-security-policy-reference/aws-policies/s3-policies/bc-aws-s3-22.html
+
+                    3  |   SensitiveBucket:
+                    4  |     Type: AWS::S3::Bucket
+                    5  |     Properties:
+                    6  |       BucketName: !Join
+                    7  |         - ''
+                    8  |         - - 'sensitive-'
+                    9  |           - !Ref 'AWS::AccountId'
+                    10 |       OwnershipControls:
+                    11 |         Rules:
+                    12 |           - ObjectOwnership: 'BucketOwnerPreferred'
+                    13 |       PublicAccessBlockConfiguration:
+                    14 |         BlockPublicAcls: false
+                    15 |         BlockPublicPolicy: false
+                    16 |         IgnorePublicAcls: false
+                    17 |         RestrictPublicBuckets: false
+            ```
+
+    4. Once again, this tool is quite chatty, but it does show you which checks failed, a link to more detail, and the snippet of your code that is not compliant. If you want to just see the failed resources and the title of the check, you can pipe the results to `grep` as follows:
+
+        ```bash
+        checkov --file /home/cloudshell-user/avoiding-data-disasters/TotallySecure.yaml \
+          | grep -B1 FAILED
+        ```
+
+        !!! summary "Sample result"
+
+            ```bash
+            Check: CKV_AWS_53: "Ensure S3 bucket has block public ACLS enabled"
+                    FAILED for resource: AWS::S3::Bucket.SensitiveBucket
+            --
+            Check: CKV_AWS_55: "Ensure S3 bucket has ignore public ACLs enabled"
+                    FAILED for resource: AWS::S3::Bucket.SensitiveBucket
+            --
+            Check: CKV_AWS_54: "Ensure S3 bucket has block public policy enabled"
+                    FAILED for resource: AWS::S3::Bucket.SensitiveBucket
+            --
+            Check: CKV_AWS_21: "Ensure the S3 bucket has versioning enabled"
+                    FAILED for resource: AWS::S3::Bucket.SensitiveBucket
+            --
+            Check: CKV_AWS_18: "Ensure the S3 bucket has access logging enabled"
+                    FAILED for resource: AWS::S3::Bucket.SensitiveBucket
+            --
+            Check: CKV_AWS_56: "Ensure S3 bucket has 'restrict_public_bucket' enabled"
+                    FAILED for resource: AWS::S3::Bucket.SensitiveBucket
+            ```
+
+    5. It appears that **Checkov** discovered 6 findings with our original code. Now, let's see if there are any issues with the latest, most secure code.
+
+        ```bash
+        checkov --file /home/cloudshell-user/avoiding-data-disasters/MostSecure.yaml
+        ```
+
+        !!! summary "Sample result"
+
+            ```bash
+            <snip>
+
+            Check: CKV_AWS_56: "Ensure S3 bucket has 'restrict_public_bucket' enabled"
+                    PASSED for resource: AWS::S3::Bucket.SensitiveBucket
+                    File: /MostSecure.yaml:3-24
+                    Guide: https://docs.paloaltonetworks.com/content/techdocs/en_US/prisma/prisma-cloud/prisma-cloud-code-security-policy-reference/aws-policies/s3-policies/bc-aws-s3-22.html
+            Check: CKV_AWS_57: "Ensure the S3 bucket does not allow WRITE permissions to everyone"
+                    PASSED for resource: AWS::S3::Bucket.SensitiveBucket
+                    File: /MostSecure.yaml:3-24
+                    Guide: https://docs.paloaltonetworks.com/content/techdocs/en_US/prisma/prisma-cloud/prisma-cloud-code-security-policy-reference/aws-policies/s3-policies/s3-2-acl-write-permissions-everyone.html
+            ```
+
+    6. You should have **no remaining findings**! This would have saved us a lot of time if we would have used this tool first!
+
 ## Conclusion
+
+This exercise really proved our approach was appropriate in solving many secure blunders and we also discovered a method to "shift security left" using a tool like **Checkov**. Now, you have a variety of ways to detect and correct storage issues that have previously rocked many organizations.
