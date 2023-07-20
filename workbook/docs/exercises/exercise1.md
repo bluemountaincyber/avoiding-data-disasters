@@ -23,7 +23,7 @@ The exercises performed in this workshop are designed to simply use your web bro
 
 Begin by logging into your AWS account and launch a **CloudShell** session  in the **N. Virginia (us-east-1)** region.
 
-Once in a **CloudShell** session, you will need to download [this code](https://github.com/bluemountaincyber.com/avoiding-data-disasters) in order to deploy resources via AWS CloudFormation. But how to pull the code down to the session? That's easy! AWS provides `git` in their **CloudShell** environment!
+Once in a **CloudShell** session, you will need to download [this code](https://github.com/bluemountaincyber/avoiding-data-disasters) in order to deploy resources via AWS CloudFormation. But how to pull the code down to the session? That's easy! AWS provides `git` in their **CloudShell** environment!
 
 ??? cmd "Solution"
 
