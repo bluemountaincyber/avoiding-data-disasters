@@ -82,7 +82,7 @@ Test that versioning is working by "accidentally" modifying our critical `custom
         aws s3 cp /tmp/customers.csv s3://$BUCKET/customers.csv
         ```
 
-        !!! summary "Sample result:
+        !!! summary "Sample result"
 
             ```bash
             upload: ../../../tmp/customers.csv to s3://sensitive-012345678910/customers.csv
