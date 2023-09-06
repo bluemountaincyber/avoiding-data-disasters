@@ -31,17 +31,17 @@ Re-run `s3audit` to see if you've cleaned up all of the findings discovered prev
 
     2. So that `s3audit` performs its checks against the correct bucket, use the AWS CLI with its `aws s3api list-buckets` command to gather information about our deployed buckets and then pass that information to the `jq` utility to parse the data and extract the bucket name beginning with the text `sensitive-`.
 
+        ```bash
+        BUCKET=$(aws s3api list-buckets | \
+          jq -r '.Buckets[] | select(.Name | startswith("sensitive-")) | .Name')
+        echo "The bucket to assess is: $BUCKET"
+        ```
+
+        !!! summary "Sample result"
+
             ```bash
-            BUCKET=$(aws s3api list-buckets | \
-              jq -r '.Buckets[] | select(.Name | startswith("sensitive-")) | .Name')
-            echo "The bucket to assess is: $BUCKET"
+            The bucket to assess is: sensitive-012345678910
             ```
-
-            !!! summary "Sample result"
-
-                ```bash
-                The bucket to assess is: sensitive-012345678910
-                ```
 
     3. You can tell `s3audit` to look at a specific bucket using the `--bucket` flag. Run the command as follows to see the results of your security configuration for your `sensitive-*` bucket.
 
