@@ -90,13 +90,13 @@ Test that versioning is working by "accidentally" modifying our critical `custom
 
     4. You have two ways to see if versioning is working: using the Management Console (i.e., web browser) or, as we'll do since we're already here, use the CLI. The following command will show you version information about your `customers.csv` file.
 
-        ```bash
-        aws s3api list-object-versions --bucket $BUCKET
-        ```
-
         !!! warning
 
             You may see a "page" of information at a time. To navigate through the results, you can use your arrow keys, space bar, and enter key to review the content. When finished, type `q` to exit this view.
+
+        ```bash
+        aws s3api list-object-versions --bucket $BUCKET
+        ```
 
         !!! summary "Sample result"
 
