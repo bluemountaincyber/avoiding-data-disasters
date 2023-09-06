@@ -8,7 +8,7 @@ pushd ~/avoiding-data-disasters >/dev/null
 echo -en $GREEN"Deploying CloudFormation stack... "$NOCOLOR
 aws cloudformation create-stack --stack-name avoiding-data-disasters --template-body file://TotallySecure.yaml >/dev/null
 while true; do
-    case $(aws cloudformation describe-stacks --query 'Stacks[].StackStatus' --output text) in
+    case $(aws cloudformation describe-stacks --stack-name avoiding-data-disasters --query 'Stacks[].StackStatus' --output text) in
         CREATE_COMPLETE)
             echo "Done"
             break
