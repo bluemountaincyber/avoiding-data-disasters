@@ -4,28 +4,6 @@ GREEN="\033[32m"
 RED="\033[31m"
 NOCOLOR="\033[0m"
 
-echo -en $GREEN"Checking S3 settings... "$NOCOLOR
-ACCTID=$(aws sts get-caller-identity --query 'Account' --output text)
-aws s3control get-public-access-block --account-id $ACCTID 2>/dev/null >?dev/null
-if [ $? -eq 0 ]; then
-    echo
-    read -p "S3 Block Public Access settings for this account is ENABLED. Disable? (y/N): " QUESTION
-    case $QUESTION in
-        Y)
-            aws s3control delete-public-access-block --account-id $ACCTID
-            ;;
-        y)
-            aws s3control delete-public-access-block --account-id $ACCTID
-            ;;
-        *)
-            echo "Exiting"
-            exit 1
-            ;;
-    esac
-else
-    echo "Done"
-fi
-
 pushd ~/avoiding-data-disasters >/dev/null
 echo -en $GREEN"Deploying CloudFormation stack... "$NOCOLOR
 aws cloudformation create-stack --stack-name avoiding-data-disasters --template-body file://TotallySecure.yaml >/dev/null
