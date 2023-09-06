@@ -1,5 +1,7 @@
 # Exercise 1: The Big Mistake
 
+<!-- markdownlint-disable MD007 MD033-->
+
 <!--Overriding style-->
 <style>
   :root {
