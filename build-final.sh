@@ -10,7 +10,7 @@ aws cloudformation delete-stack --stack-name avoiding-data-disasters 2>/dev/null
 sleep 5
 aws cloudformation create-stack --stack-name avoiding-data-disasters --template-body file://MostSecure.yaml >/dev/null
 while true; do
-    case $(aws cloudformation describe-stacks --query 'Stacks[].StackStatus' --output text) in
+    case $(aws cloudformation describe-stacks --stack-name avoiding-data-disasters --query 'Stacks[].StackStatus' --output text) in
         CREATE_COMPLETE)
             echo "Done"
             break
