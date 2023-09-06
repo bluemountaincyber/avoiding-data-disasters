@@ -21,6 +21,7 @@ if [ $? -eq 0 ]; then
             echo "Exiting"
             exit 1
             ;;
+    esac
 else
     echo "Done"
 fi
