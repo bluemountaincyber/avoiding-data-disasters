@@ -84,7 +84,7 @@ Re-run `s3audit` to see if you've cleaned up all of the findings discovered prev
 
 ### Challenge 2: Generate a Better CloudFormation Template
 
-Manually fixing these issues are fine, but if anyone were to reuse even the most recent CloudFormation template (`TotallyMoreSecure.yaml`, which is referenced by the `build-nopublic.sh` script), we will again have those remaining issues - forcing us to redo all of that work all over again. 
+Manually fixing these issues are fine, but if anyone were to reuse even the most recent CloudFormation template (`TotallyMoreSecure.yaml`, which is referenced by the `build-nopublic.sh` script), we will again have those remaining issues - forcing us to redo all of that work all over again.
 
 Tear down the current deployment, create a new CloudFormation template called `MostSecure.yaml`, and run the build-final.sh script. Afterwards, re-run `s3audit` to ensure that the new deployment met all of the checks that you manually configured previously.
 
