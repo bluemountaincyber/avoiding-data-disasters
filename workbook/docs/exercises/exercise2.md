@@ -35,7 +35,7 @@ Use either the AWS Management Console (as shown in the solution below) or the AW
 
         ![](../img/8.png ""){: class="w600" }
 
-    2. On the next page, you should see your S3 bucket starting with the name `sensitive-`. Also note that, in the **Access** column, it lists this bucket as **Public** with a hazard sign next to it (1) - signifying that this may not be an appropriate configuration for this bucket (although this can be done purposefully if you want to share something publicly). Click on the name of the bucket (2) to edit its configuration.
+    2. On the next page, you should see your S3 bucket starting with the name `sensitive-`.  Click on the name of the bucket (2) to edit its configuration.
 
         ![](../img/9.png ""){: class="w600" }
 
