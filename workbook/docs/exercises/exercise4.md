@@ -38,9 +38,12 @@ Since this `customers.csv` file and anything else that may end up in the `sensit
     2. Grab your AWS account number and create a new bucket called `security-` followed by the account number.
 
         ```bash
+        BUCKET=$(aws s3api list-buckets | \
+              jq -r '.Buckets[] | select(.Name | startswith("sensitive-")) | .Name')
+        REGION=$(aws s3api get-bucket-location --bucket $BUCKET --query LocationConstraint --output text)
         ACCTNUM=$(aws sts get-caller-identity --query 'Account' --output text)
         echo "The account number is: $ACCTNUM"
-        aws s3api create-bucket --bucket security-$ACCTNUM
+        aws s3api create-bucket --bucket security-1$ACCTNUM --create-bucket-configuration LocationConstraint=$REGION
         ```
 
         !!! summary "Sample result"
