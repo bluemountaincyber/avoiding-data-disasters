@@ -43,7 +43,7 @@ Since this `customers.csv` file and anything else that may end up in the `sensit
         REGION=$(aws s3api get-bucket-location --bucket $BUCKET --query LocationConstraint --output text)
         ACCTNUM=$(aws sts get-caller-identity --query 'Account' --output text)
         echo "The account number is: $ACCTNUM"
-        aws s3api create-bucket --bucket security-1$ACCTNUM
+        aws s3api create-bucket --bucket security-$ACCTNUM
         ```
 
         !!! summary "Sample result"
